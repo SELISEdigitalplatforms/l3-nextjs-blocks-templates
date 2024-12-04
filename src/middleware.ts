@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-const publicRoutes = ["/signin", "/signup"];
+const publicRoutes = [
+  "/signin",
+  "/signup",
+  "/forgetpassword",
+  "/resetpassword",
+  "/activate",
+  "/activate-success",
+];
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
@@ -11,6 +18,10 @@ export default async function middleware(req: NextRequest) {
 
   if (!isPublicRoute && !cookie) {
     return NextResponse.redirect(new URL("/signin", req.nextUrl));
+  }
+
+  if (isPublicRoute && cookie) {
+    return NextResponse.redirect(new URL("/", req.nextUrl));
   }
 
   return NextResponse.next();
